@@ -7,16 +7,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import ReactJson from "react-json-view"
+
 // type POMain = {
 //   cCusName: object
 // }
 
 export default ({
   poMain,
-  poDetails
+  poDetails,
+  rawInfo
 }: {
   poMain: any,
-  poDetails: any
+  poDetails: any,
+  rawInfo: any
 }) => {
   const poMainHeaders = Object.keys(poMain).map(key => {
     return poMain[key].name
@@ -92,6 +96,10 @@ export default ({
           }
         </TableBody>
       </Table>
+      <h1>全量原始数据</h1>
+      <div className="text-left">
+        <ReactJson src={rawInfo} theme="monokai" />
+      </div>
     </>
   )
 }

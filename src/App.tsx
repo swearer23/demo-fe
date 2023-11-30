@@ -79,6 +79,7 @@ function App() {
             <POTable
               poMain={poResult.po_main}
               poDetails={poResult.po_details}
+              rawInfo={poResult.raw_info}
             ></POTable>
           ) : ''
         }
