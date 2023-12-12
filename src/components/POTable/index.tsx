@@ -96,7 +96,7 @@ export default ({
           }
         </TableBody>
       </Table>
-      <h1>全量原始数据</h1>
+      <h1 className="mt-10 mb-10">全量原始数据</h1>
       <div className="text-left">
         <ReactJson src={rawInfo} theme="monokai" />
       </div>
