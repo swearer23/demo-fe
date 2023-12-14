@@ -41,9 +41,10 @@ const Component = ({
   const [dtcSkuPortion, setDtcSkuPortion] = useState(0)
   const channels = [...new Set(sales.map(sale => sale['渠道名称']))]
   const onChannelChange = (value: string) => {
-    const totalNewSKUSaleRevenue = sales.filter(item => item.是否新品 === 'Y')
-      .map(item => item.销售额)
-      .reduce((a, b) => a + b, 0)
+    const totalNewSKUSaleRevenue = 1000000
+    // sales.filter(item => item.是否新品 === 'Y')
+    //   .map(item => item.销售额)
+    //   .reduce((a, b) => a + b, 0)
     let cData = null
     if (value === 'all') cData = sales
     else cData = sales.filter(sale => sale['渠道名称'] === value)

@@ -10,11 +10,11 @@ export const minProfitLimitByChannel = [
 ]
 
 export const minNewSKUProfitLimitByChannel = [
-  0.2, 0.3, 0.05, 0.3
+  0.2, 0.3, 0., 0.
 ]
 
 export const minRevenueLimitByChannel = [
-  3000000, 2000000, 1000000, 2000000
+  50000000, 30000000, 10000000, 40000000
 ]
 
 export type settingByChannel = {

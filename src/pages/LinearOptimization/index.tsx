@@ -27,7 +27,8 @@ const modal = {
 export default () => {
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [newSkuPortion, setNewSkuPortion] = useState([15])
+  const [revenueTarget, setRevenueTarget] = useState([250000000, 500000000])
+  const [newSkuRevenue, setNewSkuRevenue] = useState([1000000])
   const [hotSkuPortion, setHotSkuPortion] = useState([10])
   const [dtcSkuPortion, setDtcSkuPortion] = useState([60])
   const [revenue, setRevenue] = useState(null)
@@ -45,7 +46,8 @@ export default () => {
       sales,
       error
     } = await linearOptimization({
-      new_sku_portion: newSkuPortion[0] / 100,
+      revenue_target: revenueTarget,
+      new_sku_revenue: newSkuRevenue[0],
       hot_sku_portion: hotSkuPortion[0] / 100,
       dtc_sku_portion: dtcSkuPortion[0] / 100,
       min_profit_rate_by_channel: minChannelProfitRate,
@@ -74,15 +76,27 @@ export default () => {
       <h1>LinearOptimization</h1>
       <p>在此设置销售计划相关参数</p>
       <div className="flex items-center space-x-2 mt-5 mb-5">
-        <Label className="w-32 text-left" htmlFor="terms">设置新品占比:</Label>
-        <span>{newSkuPortion}</span>
+        <Label className="w-32 text-left" htmlFor="terms">设置销售目标:</Label>
+        <span>{revenueTarget[0]} - {revenueTarget[1]}</span>
         <Slider
           name="newSkuPortion"
-          defaultValue={newSkuPortion}
-          max={100}
+          defaultValue={revenueTarget}
+          max={5000000000}
           step={1}
           className={cn("w-[60%]", sliderClassName)}
-          onValueChange={(value) => setNewSkuPortion(value)}
+          onValueChange={(value) => setRevenueTarget(value)}
+        />
+      </div>
+      <div className="flex items-center space-x-2 mt-5 mb-5">
+        <Label className="w-32 text-left" htmlFor="terms">设置新品总额:</Label>
+        <span>{newSkuRevenue}</span>
+        <Slider
+          name="newSkuPortion"
+          defaultValue={newSkuRevenue}
+          max={5000000}
+          step={1}
+          className={cn("w-[60%]", sliderClassName)}
+          onValueChange={(value) => setNewSkuRevenue(value)}
         />
       </div>
       <div className="flex items-center space-x-2 mt-5 mb-5">
@@ -123,7 +137,7 @@ export default () => {
         title="设置各渠道最低销售额要求"
         settings={minChannelRevenue}
         onSettingChange={setMinChannelRevenue}
-        max={10000000}
+        max={100000000}
         displayPercent={false}
       />
       <Button onClick={submit}>计算最优方案</Button>
