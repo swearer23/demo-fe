@@ -7,8 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator"
-import { useState, memo } from "react"
+import { useState, memo, useEffect } from "react"
 import { columns, Sale } from "./Columns"
+
+type Filter = {
+  '渠道名称': string,
+  'month': string
+}
 
 const Component = ({
   revenue,
@@ -22,6 +27,7 @@ const Component = ({
       'id': row.id,
       '物料ID': row.id.split('_')[0],
       '渠道名称': row.id.split('_')[1],
+      'month': row.month + '月',
       '销售数量': row.qty,
       '成本': row['成本'].toFixed(2), // '成本': '成本
       '定价': row['定价'].toFixed(2),
@@ -39,15 +45,26 @@ const Component = ({
   const [newSkuPortion, setNewSkuPortion] = useState(0)
   const [hotSkuPortion, setHotSkuPortion] = useState(0)
   const [dtcSkuPortion, setDtcSkuPortion] = useState(0)
+  const [filter, setFilter] = useState<Filter>({
+    '渠道名称': 'all',
+    'month': 'all'
+  })
   const channels = [...new Set(sales.map(sale => sale['渠道名称']))]
-  const onChannelChange = (value: string) => {
+  const onFilterChange = (value: string, key: string) => {
+    setFilter({
+      ...filter,
+      [key]: value
+    })
+  }
+  useEffect(() => {
+    console.log('filter', filter)
     const totalNewSKUSaleRevenue = 1000000
-    // sales.filter(item => item.是否新品 === 'Y')
-    //   .map(item => item.销售额)
-    //   .reduce((a, b) => a + b, 0)
-    let cData = null
-    if (value === 'all') cData = sales
-    else cData = sales.filter(sale => sale['渠道名称'] === value)
+    let cData = sales
+    Object.keys(filter).forEach(key => {
+      if (filter[key as keyof Filter] !== 'all') {
+        cData = cData.filter(sale => sale[key as keyof Sale] === filter[key as keyof Filter])
+      }
+    })
     setData(cData)
     const saleQty = cData.map(item => item.销售数量).reduce((a, b) => a + b, 0)
     setSaleQty(saleQty)
@@ -74,7 +91,7 @@ const Component = ({
       .reduce((a, b) => a + b, 0)
       / saleRevenue * 100
     setDtcSkuPortion(dtcSkuPortion)
-  }
+  }, [filter])
   return (
     <div className="text-left">
       <h1 className="mt-10 mb-10">销售计划优化结果  总销售额： {revenue}</h1>
@@ -102,7 +119,7 @@ const Component = ({
                   <TableHead key={column.accessorKey}>
                     {
                       typeof column.header === 'string'
-                      ? column.header : column.header(channels, onChannelChange)
+                      ? column.header : column.header(onFilterChange, channels)
                     }
                   </TableHead>
                 )

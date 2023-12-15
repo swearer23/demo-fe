@@ -12,6 +12,7 @@ export type Sale = {
   'id': string, // '物料ID_渠道名称
   '物料ID': string,
   '渠道名称': string,
+  '月份': number,
   '销售数量': number,
   '定价': number,
   '是否爆款': string,
@@ -23,7 +24,7 @@ export type Sale = {
 
 export type Column = {
   accessorKey: string,
-  header: string | ((channels: string[], onSelect: (value: string) => void) => JSX.Element)
+  header: string | ((onSelect: (value: string | number, key: string) => void, options?: string[]) => JSX.Element)
   cell: (props: any) => JSX.Element,
 }
 
@@ -37,19 +38,22 @@ export const columns: Column[] = [
   },
   {
     accessorKey: "渠道名称",
-    header: function (channels: string[], onSelect: (value: string) => void) {
-      let channelOptions = channels.map(item => {
+    header: function (onSelect: (value: string, key: string) => void, options?: string[]) {
+      let channelOptions = options?.map(item => {
         return {
           value: item,
           label: item
         }
-      })
+      }) || []
       channelOptions.unshift({
         value: 'all',
         label: '全部'
       })
+      const onChannelChange = (value: string) => {
+        onSelect(value, '渠道名称')
+      }
       return (
-        <Select onValueChange={onSelect}>
+        <Select onValueChange={onChannelChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="销售渠道" />
           </SelectTrigger>
@@ -74,6 +78,51 @@ export const columns: Column[] = [
     },
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("渠道名称")}</div>
+    ),
+  },
+  {
+    accessorKey: "month",
+    header: function (onSelect: (value: string, key: string) => void) {
+      let monthOptions = Array.from({length: 12}, (_, i) => i + 1).map(item => {
+        return {
+          value: item.toString(),
+          label: item.toString()
+        }
+      })
+      monthOptions.unshift({
+        value: 'all',
+        label: '全部'
+      })
+      const onMonthChange = (value: string) => {
+        value = value === 'all' ? value : parseInt(value).toString() + '月'
+        onSelect(value, 'month')
+      }
+      return (
+        <Select onValueChange={onMonthChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="月份" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>月份</SelectLabel>
+              {
+                monthOptions.map(month => {
+                  return (
+                    <SelectItem
+                      key={month.value}
+                      value={month.value}>
+                      {month.label}
+                    </SelectItem>
+                  )
+                })
+              }
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("month")}</div>
     ),
   },
   {
