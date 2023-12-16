@@ -27,7 +27,7 @@ const modal = {
 export default () => {
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [revenueTarget, setRevenueTarget] = useState([250000000, 5000000000])
+  const [revenueTarget, setRevenueTarget] = useState([250000000])
   const [newSkuRevenue, setNewSkuRevenue] = useState([1000000])
   const [hotSkuPortion, setHotSkuPortion] = useState([10])
   const [dtcSkuPortion, setDtcSkuPortion] = useState([60])
@@ -46,7 +46,7 @@ export default () => {
       sales,
       error
     } = await linearOptimization({
-      revenue_target: revenueTarget,
+      revenue_target: revenueTarget[0],
       new_sku_revenue: newSkuRevenue[0],
       hot_sku_portion: hotSkuPortion[0] / 100,
       dtc_sku_portion: dtcSkuPortion[0] / 100,
@@ -77,7 +77,7 @@ export default () => {
       <p>在此设置销售计划相关参数</p>
       <div className="flex items-center space-x-2 mt-5 mb-5">
         <Label className="w-32 text-left" htmlFor="terms">设置销售目标:</Label>
-        <span>{revenueTarget[0]} - {revenueTarget[1]}</span>
+        <span>{revenueTarget[0]}</span>
         <Slider
           name="newSkuPortion"
           defaultValue={revenueTarget}
