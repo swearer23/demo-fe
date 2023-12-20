@@ -17,10 +17,12 @@ type Filter = {
 
 const Component = ({
   revenue,
-  salesDetail
+  salesDetail,
+  newSkuRevenueExpected
 }: {
   revenue: number,
-  salesDetail: any
+  salesDetail: any,
+  newSkuRevenueExpected: number
 }) => {
   const sales: Sale[] = salesDetail.map((row: any) => {
     return {
@@ -43,6 +45,7 @@ const Component = ({
   const [saleProfit, setSaleProfit] = useState(0)
   const [saleProfitRate, setSaleProfitRate] = useState(0)
   const [newSkuPortion, setNewSkuPortion] = useState(0)
+  const [newSkuRevenue, setNewSkuRevenue] = useState(0)
   const [hotSkuPortion, setHotSkuPortion] = useState(0)
   const [dtcSkuPortion, setDtcSkuPortion] = useState(0)
   const [filter, setFilter] = useState<Filter>({
@@ -58,7 +61,6 @@ const Component = ({
   }
   useEffect(() => {
     console.log('filter', filter)
-    const totalNewSKUSaleRevenue = 1000000
     let cData = sales
     Object.keys(filter).forEach(key => {
       if (filter[key as keyof Filter] !== 'all') {
@@ -76,10 +78,11 @@ const Component = ({
     setSaleProfit(saleProfit)
     const saleProfitRate = saleProfit / saleRevenue * 100
     setSaleProfitRate(saleProfitRate)
-    const newSkuPortion = cData.filter(item => item.是否新品 === 'Y')
+    const newSkuRevenue = cData.filter(item => item.是否新品 === 'Y')
       .map(item => item.销售额)
       .reduce((a, b) => a + b, 0)
-      / totalNewSKUSaleRevenue * 100
+    const newSkuPortion = newSkuRevenue / newSkuRevenueExpected * 100
+    setNewSkuRevenue(newSkuRevenue)
     setNewSkuPortion(newSkuPortion)
     const hotSkuPortion = cData.filter(item => item.是否爆款 === 'Y')
       .map(item => item.销售额)
@@ -91,7 +94,7 @@ const Component = ({
       .reduce((a, b) => a + b, 0)
       / saleRevenue * 100
     setDtcSkuPortion(dtcSkuPortion)
-  }, [filter])
+  }, [filter, revenue, salesDetail, newSkuRevenueExpected])
   return (
     <div className="text-left">
       <h1 className="mt-10 mb-10">销售计划优化结果  总销售额： {revenue}</h1>
@@ -103,6 +106,8 @@ const Component = ({
         共计销售利润： {saleProfit.toFixed(2)}
         <Separator orientation="vertical" className="mx-5" />
         利润率: {saleProfitRate.toFixed(2)}%
+        <Separator orientation="vertical" className="mx-5" />
+        新品销售额: {newSkuRevenue.toFixed(2)}
         <Separator orientation="vertical" className="mx-5" />
         新品占比: {newSkuPortion.toFixed(2)}%
         <Separator orientation="vertical" className="mx-5" />

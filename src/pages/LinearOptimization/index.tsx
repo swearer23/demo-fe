@@ -28,7 +28,7 @@ export default () => {
   const [progress, setProgress] = useState(0)
   const [loading, setLoading] = useState(false)
   const [revenueTarget, setRevenueTarget] = useState([250000000])
-  const [newSkuRevenue, setNewSkuRevenue] = useState([1000000])
+  const [newSkuRevenue, setNewSkuRevenue] = useState([5000000])
   const [hotSkuPortion, setHotSkuPortion] = useState([10])
   const [dtcSkuPortion, setDtcSkuPortion] = useState([60])
   const [revenue, setRevenue] = useState(null)
@@ -93,7 +93,7 @@ export default () => {
         <Slider
           name="newSkuPortion"
           defaultValue={newSkuRevenue}
-          max={5000000}
+          max={50000000}
           step={1}
           className={cn("w-[60%]", sliderClassName)}
           onValueChange={(value) => setNewSkuRevenue(value)}
@@ -147,6 +147,7 @@ export default () => {
             <OptimizationDisplay
               revenue={revenue}
               salesDetail={sales}
+              newSkuRevenueExpected={newSkuRevenue[0]}
             />
           )
         }
