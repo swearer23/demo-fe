@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const headers = new Headers();
 headers.append('Access-Control-Allow-Origin', '*');
