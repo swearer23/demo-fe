@@ -13,6 +13,10 @@ import ReactJson from "react-json-view"
 //   cCusName: object
 // }
 
+interface Row {
+  [key: string]: { value: any };
+}
+
 export default ({
   poMain,
   poDetails,
@@ -32,7 +36,7 @@ export default ({
   const poDetailHeaders = Object.keys(poDetails[0]).map(key => {
     return poDetails[0][key].name
   })
-  const poDetailRows = poDetails.map((row: object) => {
+  const poDetailRows = poDetails.map((row: Row) => {
     return Object.keys(row).map(key => {
       return row[key].value
     })

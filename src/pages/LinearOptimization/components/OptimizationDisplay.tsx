@@ -142,7 +142,7 @@ const Component = ({
                   ['id', '渠道类型'].includes(key) ? null : <TableCell key={key}>
                     {
                       ['销售额'].includes(key)
-                      ? row[key as keyof Sale].toFixed(2)
+                      ? (row[key as keyof Sale] as number).toFixed(2)
                       : row[key as keyof Sale]
                     }
                   </TableCell>

@@ -24,7 +24,7 @@ export type Sale = {
 
 export type Column = {
   accessorKey: string,
-  header: string | ((onSelect: (value: string | number, key: string) => void, options?: string[]) => JSX.Element)
+  header: string | ((onSelect: (value: string, key: string) => void, options?: string[]) => JSX.Element)
   cell: (props: any) => JSX.Element,
 }
 
